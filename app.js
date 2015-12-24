@@ -2,6 +2,7 @@
 
 var request = require('superagent');
 var program = require('commander');
+var colors = require('colors');
 
 program
     .version('0.0.1')
@@ -12,6 +13,7 @@ program
 
 
 if (!program.origin || !program.destination) {
+    console.error('  error: origin and destination both have to be specified.'.red);
     program.help();
 };
 
@@ -27,13 +29,21 @@ request
     .get('https://maps.googleapis.com/maps/api/directions/json')
     .query(params)
     .then(function(resp) {
-        console.log("Success!!!")
         var leg = resp.body.routes[0].legs[0];
 
-        console.info(leg.duration);
-        console.info(leg.duration_in_traffic);
+        var closeEnough = leg.duration.value * 1.15; // essentially, we're allowing for 115% of normal.
+        var trafficTime = leg.duration_in_traffic.value;
+
+        var shouldLeave = closeEnough >= trafficTime;
+
+        if (!shouldLeave) {
+            console.info('Trip time is currently %d percent of normal.'.red, trafficTime/leg.duration.value * 100);
+            console.info('Monitoring in progress. You\'ll be notified when it\'s time to leave.');
+        } else {
+            console.info('You can now leave. Your trip is expected to take %s.'.green, leg.duration_in_traffic.text);
+        }
 
     }, function(err) {
-        console.error("An error occurred!");
-        console.error(err);
+        console.error('An error occurred!'.red);
+        program.help();
     });
