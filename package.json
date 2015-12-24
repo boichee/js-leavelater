@@ -1,0 +1,14 @@
+{
+  "name": "leavelater",
+  "version": "0.0.1",
+  "description": "A simple app that uses Google's Directions API to let you know about traffic conditions.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "superagent": "^1.6.1"
+  }
+}
