@@ -17,9 +17,9 @@ if (!program.origin || !program.destination) {
     program.help();
 };
 
-
+// TODO: Remove the gmaps token from the code
 var params = Object.create({
-    key: 'AIzaSyC8tAh9LPl_KfWtuDWNgpiFbwrLnV0Rn6U',
+    key: process.env.GOOGLE_DIRECTIONS_API_TOKEN,
     origin: program.origin,
     destination: program.destination,
     departure_time: 'now'
