@@ -28,6 +28,19 @@ request
     .get('https://maps.googleapis.com/maps/api/directions/json')
     .query(params)
     .then(function(resp) {
+        if (!resp.body) {
+            console.error('A HTTP error or some other crazy error occurred. That\'s all I know.');
+            process.exit(1);
+        } else if (resp.body.status === 'NOT_FOUND' ) {
+            console.error('The origin or destination you provided could not be reverse geocoded. Try entering a complete address instead.'.red);
+            process.exit(1);
+        } else if (resp.body.error_message) {
+            console.error('Something went wrong while calling the API: %s'.red, resp.body.error_message);
+            process.exit(1);
+        }
+
+        console.log(resp.body);
+        
         var leg = resp.body.routes[0].legs[0];
 
         var closeEnough = leg.duration.value * 1.15; // essentially, we're allowing for 115% of normal.
