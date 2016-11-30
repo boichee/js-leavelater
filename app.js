@@ -68,8 +68,8 @@ function checkTripTime(params, acceptableProportion, nextCheckTime) {
             console.info('Time with traffic is currently %s', trafficTime.text);
 
             if (closeEnough < trafficTime.value) {
-                console.info('Trip time is currently %d%% of normal.'.red, (currentProportionOfNormal * 100).toFixed(2));
                 console.info('Your ETA is', eta);
+                console.info('Trip time is currently %d%% of normal.'.red, (currentProportionOfNormal * 100).toFixed(2));
                 console.info('Monitoring in progress... next check in %d %s.', Math.round(nextCheckTime/ONE_MINUTE, 1), Math.round(nextCheckTime/ONE_MINUTE, 1) > 1 ? 'minutes' : 'minute');
 
                 setTimeout(() => {
