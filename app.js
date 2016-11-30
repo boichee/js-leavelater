@@ -56,19 +56,20 @@ function checkTripTime(params, acceptableProportion, nextCheckTime) {
             }
 
             // console.log(resp.body);
-            
             var leg = resp.body.routes[0].legs[0];
-
             var normalTime = leg.duration;
             var trafficTime = leg.duration_in_traffic;
             var closeEnough = normalTime.value * acceptableProportion;
             var currentProportionOfNormal = trafficTime.value / normalTime.value;
+            var timeOfArrival = new Date(Date.now() + trafficTime.value * 1000);
+            var eta = timeOfArrival.getHours() + ":" + timeOfArrival.getMinutes();
 
             console.info('Normal trip time is %s', normalTime.text);
             console.info('Time with traffic is currently %s', trafficTime.text);
 
             if (closeEnough < trafficTime.value) {
                 console.info('Trip time is currently %d%% of normal.'.red, (currentProportionOfNormal * 100).toFixed(2));
+                console.info('Your ETA is', eta);
                 console.info('Monitoring in progress... next check in %d %s.', Math.round(nextCheckTime/ONE_MINUTE, 1), Math.round(nextCheckTime/ONE_MINUTE, 1) > 1 ? 'minutes' : 'minute');
 
                 setTimeout(() => {
@@ -83,4 +84,3 @@ function checkTripTime(params, acceptableProportion, nextCheckTime) {
             program.help();
         });
 }
-
